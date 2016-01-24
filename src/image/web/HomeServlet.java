@@ -1,6 +1,7 @@
 package image.web;
 
 import image.processing.ImageProcessor;
+import image.processing.PointProcessor;
 import sun.misc.BASE64Encoder;
 import sun.misc.IOUtils;
 
@@ -17,6 +18,7 @@ import java.awt.image.RenderedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.*;
 
 /**
  * Created by Raihan on 23-Jan-16.
@@ -32,8 +34,8 @@ public class HomeServlet extends HttpServlet {
         ImageProcessor ipInput = new ImageProcessor(img);
         ImageProcessor ipOutput = new ImageProcessor(img);
 
-        ipOutput.applyFilter();
-
+        java.util.List<Point> lst = ipOutput.getPixelsByColor(new Color(0, 0, 0));
+        lst = PointProcessor.groupPoints(lst);
         request.setAttribute("inputImage", ipInput.getSrcData());
         request.setAttribute("outputImage", ipOutput.getSrcData());
 

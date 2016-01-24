@@ -27,8 +27,6 @@ public class ImageProcessor {
     }
 
     public String getSrcData() throws IOException {
-        //ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        //ImageIO.write((RenderedImage) this.image, "jpeg", bos);
         byte[] imageBytes = getImgBytes(this.image);
 
         BASE64Encoder encoder = new BASE64Encoder();
@@ -56,10 +54,46 @@ public class ImageProcessor {
         this.image = Toolkit.getDefaultToolkit().createImage(imageProducer);
     }
 
+    public void printPixelARGB(int pixel) {
+        int alpha = (pixel >> 24) & 0xff;
+        int red = (pixel >> 16) & 0xff;
+        int green = (pixel >> 8) & 0xff;
+        int blue = (pixel) & 0xff;
+        System.out.println("argb: " + alpha + ", " + red + ", " + green + ", " + blue);
+    }
+
+    public List<Point> getPixelsByColor(Color color) {
+        int colorRGB = color.getRGB() | 0xFF000000;
+        BufferedImage img = getBufferedImage(this.image);
+
+        List<Point> lst = new ArrayList<Point>();
+
+        int w = img.getWidth();
+        int h = img.getHeight();
+        System.out.println("width, height: " + w + ", " + h);
+
+        for (int i = 0; i < h; i++) {
+            for (int j = 0; j < w; j++) {
+                int pixel = img.getRGB(j, i);
+
+                if(pixel == colorRGB) {
+                    lst.add(new Point(j, i));
+
+                    System.out.println("x,y: " + j + ", " + i);
+                    System.out.println(pixel);
+                    printPixelARGB(pixel);
+                    System.out.println("");
+                }
+            }
+        }
+
+        return lst;
+    }
+
     private byte [] getImgBytes(Image image) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         try {
-            ImageIO.write(getBufferedImage(image), "JPEG", baos);
+            ImageIO.write(getBufferedImage(image), "jpeg", baos);
         } catch (IOException ex) {
             //handle it here.... not implemented yet...
         }
@@ -70,8 +104,8 @@ public class ImageProcessor {
         int width = image.getWidth(null);
         int height = image.getHeight(null);
         BufferedImage bi = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-        //Graphics2D g2d = bi.createGraphics();
-        //g2d.drawImage(image, 0, 0, null);
+        Graphics2D g2d = bi.createGraphics();
+        g2d.drawImage(image, 0, 0, null);
         return bi;
     }
 }
