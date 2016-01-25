@@ -54,14 +54,6 @@ public class ImageProcessor {
         this.image = Toolkit.getDefaultToolkit().createImage(imageProducer);
     }
 
-    public void printPixelARGB(int pixel) {
-        int alpha = (pixel >> 24) & 0xff;
-        int red = (pixel >> 16) & 0xff;
-        int green = (pixel >> 8) & 0xff;
-        int blue = (pixel) & 0xff;
-        System.out.println("argb: " + alpha + ", " + red + ", " + green + ", " + blue);
-    }
-
     public List<Point> getPixelsByColor(Color color) {
         int colorRGB = color.getRGB() | 0xFF000000;
         BufferedImage img = getBufferedImage(this.image);
@@ -78,16 +70,24 @@ public class ImageProcessor {
 
                 if(pixel == colorRGB) {
                     lst.add(new Point(j, i));
-
-                    System.out.println("x,y: " + j + ", " + i);
-                    System.out.println(pixel);
-                    printPixelARGB(pixel);
-                    System.out.println("");
                 }
             }
         }
 
         return lst;
+    }
+
+    public void drawLine(List<Point> points, Color color) {
+        Graphics2D g2d = (Graphics2D) this.image.getGraphics();
+        g2d.setColor(color);
+
+        for (int i = 0; i < points.size(); i++) {
+            int prevIndex = (i - 1);
+            Point prevPoint = points.get((prevIndex < 0) ? (points.size() - 1) : prevIndex);
+            Point curPoint = points.get(i);
+            g2d.drawLine((int) prevPoint.getX(), (int) prevPoint.getY(), (int) curPoint.getX(), (int) curPoint.getY());
+        }
+        g2d.finalize();
     }
 
     private byte [] getImgBytes(Image image) {

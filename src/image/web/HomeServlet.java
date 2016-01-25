@@ -1,5 +1,6 @@
 package image.web;
 
+import image.processing.ConvexHull;
 import image.processing.ImageProcessor;
 import image.processing.PointProcessor;
 import sun.misc.BASE64Encoder;
@@ -19,6 +20,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
+import java.util.List;
 
 /**
  * Created by Raihan on 23-Jan-16.
@@ -36,6 +38,9 @@ public class HomeServlet extends HttpServlet {
 
         java.util.List<Point> lst = ipOutput.getPixelsByColor(new Color(0, 0, 0));
         lst = PointProcessor.groupPoints(lst);
+        List<Point> convexHull = ConvexHull.generateConvexHull((ArrayList<Point>) lst);
+        ipOutput.drawLine(convexHull, new Color(255, 0, 0));
+
         request.setAttribute("inputImage", ipInput.getSrcData());
         request.setAttribute("outputImage", ipOutput.getSrcData());
 
