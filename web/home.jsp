@@ -32,10 +32,10 @@
 
     <tr>
         <td>
-            <img src="${inputImage}" width="100%" alt="Input"/>
+            <img src="${inputImage}" alt="Input"/>
         </td>
         <td>
-            <img src="${outputImage}" width="100%" alt="Output"/>
+            <img src="${outputImage}" alt="Output"/>
         </td>
     </tr>
 </table>

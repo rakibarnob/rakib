@@ -90,6 +90,10 @@ public class ImageProcessor {
         g2d.finalize();
     }
 
+    public List<Point> getEdges(float level){
+        return PointProcessor.getEdge(getBufferedImage(this.image), level);
+    }
+
     private byte [] getImgBytes(Image image) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         try {

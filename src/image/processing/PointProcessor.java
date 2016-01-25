@@ -1,6 +1,7 @@
 package image.processing;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.*;
 import java.util.List;
 
@@ -34,5 +35,38 @@ public abstract class PointProcessor {
         }
 
         return result;
+    }
+
+    public static java.util.List<Point> getEdge(BufferedImage image, float level) {
+        List<Point> result = new ArrayList<Point>();
+
+        for (int y = 0; y < (image.getHeight() - 1); y++) {
+            for (int x = 0; x < (image.getWidth() - 1); x++) {
+                int colorCurPx = image.getRGB(x, y);
+                int colorRightPx = image.getRGB(x + 1, y);
+                int colorBelowPx = image.getRGB(x, y + 1);
+
+                float pxLum = getLuminance(colorCurPx);
+                float rightLum = getLuminance(colorRightPx);
+                float belowLum = getLuminance(colorBelowPx);
+
+                if ((rightLum - pxLum) > level && (belowLum - pxLum) > level) {
+                    result.add(new Point(x, y));
+                }
+            }
+        }
+
+        return result;
+    }
+
+    private static float getLuminance(int color) {
+        // extract each color component
+        int red = (color >>> 16) & 0xFF;
+        int green = (color >>> 8) & 0xFF;
+        int blue = (color >>> 0) & 0xFF;
+
+        // calc luminance in range 0.0 to 1.0; using SRGB luminance constants
+        float luminance = (red * 0.2126f + green * 0.7152f + blue * 0.0722f) / 255;
+        return luminance;
     }
 }

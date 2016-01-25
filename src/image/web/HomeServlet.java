@@ -36,10 +36,11 @@ public class HomeServlet extends HttpServlet {
         ImageProcessor ipInput = new ImageProcessor(img);
         ImageProcessor ipOutput = new ImageProcessor(img);
 
-        java.util.List<Point> lst = ipOutput.getPixelsByColor(new Color(0, 0, 0));
-        lst = PointProcessor.groupPoints(lst);
+        //java.util.List<Point> lst = ipOutput.getPixelsByColor(new Color(125, 42, 16));
+        java.util.List<Point> lst = ipOutput.getEdges(0.01f);
+        //lst = PointProcessor.groupPoints(lst);
         List<Point> convexHull = ConvexHull.generateConvexHull((ArrayList<Point>) lst);
-        ipOutput.drawLine(convexHull, new Color(255, 0, 0));
+        ipOutput.drawLine(convexHull, new Color(0, 255, 25));
 
         request.setAttribute("inputImage", ipInput.getSrcData());
         request.setAttribute("outputImage", ipOutput.getSrcData());
