@@ -10,7 +10,7 @@ import java.util.Comparator;
  */
 public abstract class ConvexHull {
     public static ArrayList<Point> generateConvexHull(ArrayList<Point> points) {
-        if(points.size() < 1) return new ArrayList<Point>();
+        if(points.size() < 2) return new ArrayList<Point>();
 
         ArrayList<Point> xSorted = (ArrayList<Point>) points.clone();
         Collections.sort(xSorted, new XCompare());

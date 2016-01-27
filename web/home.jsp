@@ -8,17 +8,27 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title></title>
+    <title>Convex Hull</title>
 </head>
 <body bgcolor="#cccccc">
 <h1><a href="/">Convex Hull</a></h1>
 
-<h3>Please upload your image:</h3>
+<p style="color: red;">
+    <%
+        out.write(
+            request.getAttribute("errorMessage") == null ? "" : request.getAttribute("errorMessage").toString()
+        );
+    %>
+</p>
 
 <form action="" method="post" enctype="multipart/form-data">
-    <input type="file" name="imageFile"/>
+    Image: <input type="file" name="imageFile"/>
 
-    <input type="submit" value="Upload"/>
+    Select Color: <input type="text" name="color" value="${color}" />
+
+    Color Tolerance: <input type="text" name="tolerance" value="${tolerance}" />
+
+    <input type="submit" value="Update"/>
 </form>
 
 <br/>
@@ -32,10 +42,10 @@
 
     <tr>
         <td>
-            <img src="${inputImage}" alt="Input"/>
+            <img src="${inputImage}" style="max-width: 100%;" alt="Input"/>
         </td>
         <td>
-            <img src="${outputImage}" alt="Output"/>
+            <img src="${outputImage}" style="max-width: 100%;" alt="Output"/>
         </td>
     </tr>
 </table>

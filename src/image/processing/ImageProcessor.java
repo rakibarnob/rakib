@@ -17,7 +17,13 @@ public class ImageProcessor {
     private Image image;
 
     public ImageProcessor(Image img){
-        this.image = img;
+        BufferedImage originalImage = getBufferedImage(img);
+        BufferedImage copyOfImage =
+                new BufferedImage(originalImage.getWidth(), originalImage.getHeight(), BufferedImage.TYPE_INT_RGB);
+        Graphics g = copyOfImage.createGraphics();
+        g.drawImage(originalImage, 0, 0, null);
+
+        this.image = (Image) copyOfImage;
     }
 
     public List<Point> getPoints(){
@@ -54,7 +60,8 @@ public class ImageProcessor {
         this.image = Toolkit.getDefaultToolkit().createImage(imageProducer);
     }
 
-    public List<Point> getPixelsByColor(Color color) {
+    public List<Point> getPixelsByColor(Color color, float tolerance) {
+        int tolInt = (int) (tolerance * 1000000);
         int colorRGB = color.getRGB() | 0xFF000000;
         BufferedImage img = getBufferedImage(this.image);
 
@@ -68,7 +75,7 @@ public class ImageProcessor {
             for (int j = 0; j < w; j++) {
                 int pixel = img.getRGB(j, i);
 
-                if(pixel == colorRGB) {
+                if(Math.abs(pixel - colorRGB) < tolInt) {
                     lst.add(new Point(j, i));
                 }
             }

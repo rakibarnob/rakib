@@ -30,14 +30,27 @@ import java.util.List;
 public class HomeServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Part filePart = request.getPart("imageFile");
-        InputStream fileContent = filePart.getInputStream();
-        Image img = ImageIO.read(fileContent);
+        if(filePart.getSize() > 0) {
+            InputStream fileContent = filePart.getInputStream();
+            Image img = ImageIO.read(fileContent);
+            request.getSession().setAttribute("image", img);
+        }
+        request.getSession().setAttribute("color", request.getParameter("color"));
+        request.getSession().setAttribute("tolerance", request.getParameter("tolerance"));
 
-        ImageProcessor ipInput = new ImageProcessor(img);
-        ImageProcessor ipOutput = new ImageProcessor(img);
+        Image sessionImage = (Image) request.getSession().getAttribute("image");
 
-        //java.util.List<Point> lst = ipOutput.getPixelsByColor(new Color(125, 42, 16));
-        java.util.List<Point> lst = ipOutput.getEdges(0.01f);
+        if(sessionImage == null){
+            request.setAttribute("errorMessage", "Please upload an image");
+            request.getRequestDispatcher("/home.jsp").forward(request, response);
+        }
+
+        ImageProcessor ipInput = new ImageProcessor(sessionImage);
+        ImageProcessor ipOutput = new ImageProcessor(sessionImage);
+
+        java.util.List<Point> lst = ipOutput.getPixelsByColor(new Color(130, 61, 30), 5f);
+        //java.util.List<Point> lst = ipOutput.getEdges(0.007f);
+
         //lst = PointProcessor.groupPoints(lst);
         List<Point> convexHull = ConvexHull.generateConvexHull((ArrayList<Point>) lst);
         ipOutput.drawLine(convexHull, new Color(0, 255, 25));
