@@ -30,7 +30,7 @@ import java.util.List;
 public class HomeServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Part filePart = request.getPart("imageFile");
-        if(filePart.getSize() > 0) {
+        if (filePart.getSize() > 0) {
             InputStream fileContent = filePart.getInputStream();
             Image img = ImageIO.read(fileContent);
             request.getSession().setAttribute("image", img);
@@ -39,16 +39,27 @@ public class HomeServlet extends HttpServlet {
         request.getSession().setAttribute("tolerance", request.getParameter("tolerance"));
 
         Image sessionImage = (Image) request.getSession().getAttribute("image");
+        String sessionColor = (String) request.getSession().getAttribute("color");
+        String sessionTolerance = (String) request.getSession().getAttribute("tolerance");
 
-        if(sessionImage == null){
+        if (sessionImage == null) {
             request.setAttribute("errorMessage", "Please upload an image");
+            request.getRequestDispatcher("/home.jsp").forward(request, response);
+        }
+
+        Color color = null;
+        try{
+            color = Color.decode(sessionColor);
+        } catch (Exception e){
+            request.setAttribute("errorMessage", "Please give a valid hex for color");
             request.getRequestDispatcher("/home.jsp").forward(request, response);
         }
 
         ImageProcessor ipInput = new ImageProcessor(sessionImage);
         ImageProcessor ipOutput = new ImageProcessor(sessionImage);
 
-        java.util.List<Point> lst = ipOutput.getPixelsByColor(new Color(130, 61, 30), 5f);
+        java.util.List<Point> lst = ipOutput.getPixelsByColor( color,
+                Float.parseFloat(sessionTolerance));
         //java.util.List<Point> lst = ipOutput.getEdges(0.007f);
 
         //lst = PointProcessor.groupPoints(lst);
@@ -62,6 +73,7 @@ public class HomeServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.getSession().setAttribute("tolerance", 5f);
         request.getRequestDispatcher("/home.jsp").forward(request, response);
     }
 }
