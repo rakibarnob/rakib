@@ -37,6 +37,19 @@ public abstract class PointProcessor {
         return result;
     }
 
+    public static java.util.List<java.util.List<Point>> detectDistantPoints(List<Point> list){
+        sortByXCoordinates(list);
+
+        List<List<Point>> result = new ArrayList<List<Point>>();
+        result.add(list);
+
+        return result;
+    }
+
+    private static void sortByXCoordinates(List<Point> list) {
+        Collections.sort(list, new PointCompare());
+    }
+
     public static java.util.List<Point> getEdge(BufferedImage image, float level) {
         List<Point> result = new ArrayList<Point>();
 
@@ -68,5 +81,20 @@ public abstract class PointProcessor {
         // calc luminance in range 0.0 to 1.0; using SRGB luminance constants
         float luminance = (red * 0.2126f + green * 0.7152f + blue * 0.0722f) / 255;
         return luminance;
+    }
+}
+
+class PointCompare implements Comparator<Point> {
+
+    public int compare(final Point a, final Point b) {
+        if (a.x < b.x) {
+            return -1;
+        }
+        else if (a.x > b.x) {
+            return 1;
+        }
+        else {
+            return 0;
+        }
     }
 }

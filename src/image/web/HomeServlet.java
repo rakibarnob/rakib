@@ -63,6 +63,7 @@ public class HomeServlet extends HttpServlet {
         //java.util.List<Point> lst = ipOutput.getEdges(0.007f);
 
         //lst = PointProcessor.groupPoints(lst);
+        PointProcessor.detectDistantPoints(lst);
         List<Point> convexHull = ConvexHull.generateConvexHull((ArrayList<Point>) lst);
         ipOutput.drawLine(convexHull, new Color(0, 255, 25));
 
