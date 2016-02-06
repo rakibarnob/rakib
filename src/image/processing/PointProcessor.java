@@ -6,7 +6,7 @@ import java.util.*;
 import java.util.List;
 
 /**
- * Created by Raihan on 1/24/2016.
+ * Created by Rakib on 1/24/2016.
  */
 public abstract class PointProcessor {
     public static final int TOLERANCE = 1;

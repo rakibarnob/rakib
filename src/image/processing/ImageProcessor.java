@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Raihan on 24-Jan-16.
+ * Created by Rakib on 24-Jan-16.
  */
 public class ImageProcessor {
     private Image image;

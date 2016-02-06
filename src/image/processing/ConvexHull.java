@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.util.Comparator;
 
 /**
- * Created by Raihan on 1/25/2016.
+ * Created by Rakib on 1/25/2016.
  */
 public abstract class ConvexHull {
     public static ArrayList<Point> generateConvexHull(ArrayList<Point> points) {
