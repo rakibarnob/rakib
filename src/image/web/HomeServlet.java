@@ -44,7 +44,7 @@ public class HomeServlet extends HttpServlet {
 
         if (sessionImage == null) {
             request.setAttribute("errorMessage", "Please upload an image");
-            request.getRequestDispatcher("/home.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/home.jsp").forward(request, response);
         }
 
         Color color = null;
@@ -52,7 +52,7 @@ public class HomeServlet extends HttpServlet {
             color = Color.decode(sessionColor);
         } catch (Exception e){
             request.setAttribute("errorMessage", "Please give a valid hex for color");
-            request.getRequestDispatcher("/home.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/home.jsp").forward(request, response);
         }
 
         ImageProcessor ipInput = new ImageProcessor(sessionImage);
@@ -70,11 +70,12 @@ public class HomeServlet extends HttpServlet {
         request.setAttribute("inputImage", ipInput.getSrcData());
         request.setAttribute("outputImage", ipOutput.getSrcData());
 
-        request.getRequestDispatcher("/home.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/home.jsp").forward(request, response);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.getSession().setAttribute("color", "#000000");
         request.getSession().setAttribute("tolerance", 5f);
-        request.getRequestDispatcher("/home.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/home.jsp").forward(request, response);
     }
 }
